@@ -45,6 +45,16 @@ module.exports = (app)=>{
         res.render('mygrid_excluir.ejs', {dados:procurar})
     })
 
+    //listar o documento para o alterar
+    app.get('/mygrid_alterar', async(req,res)=>{
+        //recuperar o id da barra de endereço
+        var id = req.query.id
+        //procurar o documento específico
+        var procurar = await modelo.findOne({_id:id})
+        //abrir a view mygrid_alterar e enviar a json do documento
+        res.render('mygrid_alterar.ejs', {dados:procurar})
+    })
+
     //Excluir documento da colection atual
     app.get('/excluir_mygrid', async(req, res)=>{
         //recuperando o id da barra de endereço
