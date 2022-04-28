@@ -64,4 +64,19 @@ module.exports = (app)=>{
         //valtar pra página mygrid
         res.redirect('/mygrid')
     })
+
+     //Alterar documento da colection atual
+     app.post('/alterar_mygrid', async(req, res)=>{
+        //recuperando o id da barra de endereço
+        var id = req.query.id
+        //recuperar as informações digitadas
+        var dados = req.body
+        //excluindo o documento da colection
+        var alterar = await modelo.findOneAndUpdate(
+            {_id:id},
+            {titulo:dados.titulo,
+            texto:dados.texto})
+        //valtar pra página mygrid
+        res.redirect('/mygrid')
+    })
 }
