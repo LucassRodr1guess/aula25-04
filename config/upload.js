@@ -1,36 +1,38 @@
+
 //importar o pacote multer
 const multer = require('multer')
 
-//configurar o padrao de armazenamento
+//configurar o padrão de armazenamento
 const armazenamento = multer.diskStorage(
     //pasta de destino
     {
-        destination: (req, file, cb) => {
-            cb(null, './uploads/')
+        destination:(req,file,cb)=>{
+            cb(null,'./assets/images/')
         },
         //definir o padrão para os nomes dos arquivos
-        filename: (req, file, cb) => {
-            cb(null, Date.now() + file.originalname)
+        filename:(req,file,cb)=>{
+            cb(null,Date.now()+file.originalname)
         }
     }
 )
+//definimos que o tamanho máximo é de 100kb (100*1024)
+var tamanho = 100*1024
 
 var upload = multer({
-    storage: armazenamento,
-    fileFilter: (req, file, cb) => {
-        if (
-            file.mimetype == "image/png" ||
+    storage:armazenamento,
+    limits:{fileSize:tamanho},
+    fileFilter:(req,file,cb)=>{
+        if(
+            file.mimetype == "image/png" || 
             file.mimetype == "image/jpg" ||
             file.mimetype == "image/jpeg"
-        ) {
-            cb(null, true)
-        } else {
-            cb(null, false)
-            return cb(new Error("Tipo de arquivo inválido"))
+        ){
+            cb(null,true)
+        }else{
+            cb(null,false)
+            return cb(new Error('Tipo de arquivo inválido'))
         }
-    },
-    limits: { fileSize: 100000 }
-
-}).single("imagem")
+    }
+}).single('imagem')
 
 module.exports = upload

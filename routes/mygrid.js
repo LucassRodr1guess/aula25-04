@@ -9,7 +9,7 @@ module.exports = (app)=>{
         //conectar com o database
         conexao()
         //buscar todos os documentos da colecao mygrid
-        modelo.find()
+        modelo.find().sort({_id:-1})
         .then((modelo)=>{
             res.render('mygrid.ejs',{dados:modelo})
         })
@@ -42,7 +42,7 @@ module.exports = (app)=>{
         //procurar o documento específico
         var procurar = await modelo.findOne({_id:id})
         //abrir a view mygrid_excluir e enviar a json do documento
-        res.render('mygrid_excluir.ejs', {dados:procurar})
+        res.render('mygrid_excluir.ejs',{dados:procurar})
     })
 
     //listar o documento para o alterar
@@ -55,28 +55,30 @@ module.exports = (app)=>{
         res.render('mygrid_alterar.ejs', {dados:procurar})
     })
 
-    //Excluir documento da colection atual
+    //Excluir documento da colection atual 
     app.get('/excluir_mygrid', async(req, res)=>{
         //recuperando o id da barra de endereço
         var id = req.query.id
         //excluindo o documento da colection
         var excluir = await modelo.findOneAndRemove({_id:id})
-        //valtar pra página mygrid
+        //voltar pra página mygrid
         res.redirect('/mygrid')
     })
 
-     //Alterar documento da colection atual
-     app.post('/alterar_mygrid', async(req, res)=>{
-        //recuperando o id da barra de endereço
+
+    //alterar o documento da coleção atual
+    app.post('/alterar_mygrid',async(req,res)=>{
+        //recuperando o id da barra de endereços
         var id = req.query.id
         //recuperar as informações digitadas
         var dados = req.body
-        //excluindo o documento da colection
+        //alterando o documento da coleção
         var alterar = await modelo.findOneAndUpdate(
             {_id:id},
             {titulo:dados.titulo,
             texto:dados.texto})
-        //valtar pra página mygrid
+        //voltar para a página mygrid
         res.redirect('/mygrid')
     })
+    
 }
