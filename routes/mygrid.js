@@ -9,7 +9,7 @@ module.exports = (app)=>{
         //conectar com o database
         conexao()
         //buscar todos os documentos da colecao mygrid
-        modelo.find().sort({_id:-1})
+        modelo.find()
         .then((modelo)=>{
             res.render('mygrid.ejs',{dados:modelo})
         })
@@ -34,51 +34,52 @@ module.exports = (app)=>{
             res.send('Não foi possível gravar os dados no DB')
         })
     })
-
-    //listar o documento para o excluir
-    app.get('/mygrid_excluir', async(req,res)=>{
-        //recuperar o id da barra de endereço
-        var id = req.query.id
-        //procurar o documento específico
-        var procurar = await modelo.findOne({_id:id})
-        //abrir a view mygrid_excluir e enviar a json do documento
-        res.render('mygrid_excluir.ejs',{dados:procurar})
+    // listar o documento para o excluir
+    app.get('/mygrid_excluir',async(req,res)=>{
+    // recuperar o id da barra de endereço
+        var id=req.query.id
+    // procurar o documento específico 
+    var procurar = await modelo.findOne({_id:id})
+    // abrir a view mygrid_excluir para o json
+    res.render('mygrid_excluir.ejs',{dados:procurar})
     })
 
-    //listar o documento para o alterar
-    app.get('/mygrid_alterar', async(req,res)=>{
-        //recuperar o id da barra de endereço
-        var id = req.query.id
-        //procurar o documento específico
-        var procurar = await modelo.findOne({_id:id})
-        //abrir a view mygrid_alterar e enviar a json do documento
-        res.render('mygrid_alterar.ejs', {dados:procurar})
-    })
-
-    //Excluir documento da colection atual 
-    app.get('/excluir_mygrid', async(req, res)=>{
+    //excluir documento da coleção atual
+    app.get('/excluir_mygrid',async(req,res)=>{
         //recuperando o id da barra de endereço
-        var id = req.query.id
-        //excluindo o documento da colection
-        var excluir = await modelo.findOneAndRemove({_id:id})
-        //voltar pra página mygrid
+        var id =req.query.id
+        //excluindo o documento da coleção 
+        var excluir= await modelo.findOneAndRemove({_id:id})
+        //voltar para a página mygrid
         res.redirect('/mygrid')
+        
     })
 
+    // listar o documento para o alterar
+    app.get('/mygrid_alterar',async(req,res)=>{
+        // recuperar o id da barra de endereço
+            var id=req.query.id
+        // procurar o documento específico 
+        var procurar = await modelo.findOne({_id:id})
+        // abrir a view mygrid_alterar para o json
+        res.render('mygrid_alterar.ejs',{dados:procurar})
+    })
 
-    //alterar o documento da coleção atual
+    
+    //alterar documento da coleção atual
     app.post('/alterar_mygrid',async(req,res)=>{
-        //recuperando o id da barra de endereços
-        var id = req.query.id
+        //recuperando o id da barra de endereço
+        var id =req.query.id
         //recuperar as informações digitadas
         var dados = req.body
-        //alterando o documento da coleção
-        var alterar = await modelo.findOneAndUpdate(
+        //alterando o documento da coleção 
+        var alterar= await modelo.findOneAndUpdate(
             {_id:id},
             {titulo:dados.titulo,
             texto:dados.texto})
         //voltar para a página mygrid
         res.redirect('/mygrid')
+        
     })
     
 }
